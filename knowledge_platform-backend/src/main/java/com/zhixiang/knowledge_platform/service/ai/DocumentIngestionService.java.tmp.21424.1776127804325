@@ -1,0 +1,138 @@
+package com.zhixiang.knowledge_platform.service.ai;
+
+import com.zhixiang.knowledge_platform.entity.Document;
+import com.zhixiang.knowledge_platform.entity.Tag;
+import com.zhixiang.knowledge_platform.repository.DocumentRepository;
+import com.zhixiang.knowledge_platform.service.TagService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.reader.tika.TikaDocumentReader;
+import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@Service
+@ConditionalOnProperty(name = "zhixiang.ai.enabled", havingValue = "true")
+@RequiredArgsConstructor
+@Slf4j
+public class DocumentIngestionService {
+
+    private final RagService ragService;
+    private final AiService aiService;
+    private final DocumentRepository documentRepository;
+    private final TagService tagService;
+
+    /**
+     * Async ingestion of document content
+     * @param file The file to process
+     * @param docId The ID of the document in database
+     * @param title The title of the document
+     */
+    @Async
+    public void ingestDocument(File file, Long docId, String title) {
+        try {
+            log.info("Starting ingestion for document: {} (ID: {})", title, docId);
+            
+            // Update status to PROCESSING
+            updateAiStatus(docId, "PROCESSING");
+            
+            Resource resource = new FileSystemResource(file);
+            TikaDocumentReader reader = new TikaDocumentReader(resource);
+            
+            // 1. Read and Extract Text
+            List<org.springframework.ai.document.Document> documents = reader.get();
+            if (documents.isEmpty()) {
+                log.warn("No content extracted from document: {}", title);
+                updateAiStatus(docId, "FAILED");
+                return;
+            }
+            
+            // Combine content for AI analysis (use first 5000 chars or all content)
+            String fullContent = documents.stream()
+                .map(org.springframework.ai.document.Document::getContent)
+                .collect(Collectors.joining("\n"));
+            
+            // 2. Generate Summary & Tags
+            log.info("Generating AI summary and tags for document: {}", title);
+            String summary = aiService.generateSummary(fullContent);
+            List<String> tags = aiService.generateTags(fullContent);
+            
+            // Update Document with AI results
+            updateDocumentWithAiResults(docId, summary, tags);
+            
+            // 3. Split into Chunks for RAG
+            TokenTextSplitter splitter = new TokenTextSplitter();
+            List<org.springframework.ai.document.Document> chunks = splitter.apply(documents);
+            
+            // 4. Add Metadata (docId must be String to match RagService.ingestDocument and similaritySearch filter)
+            for (org.springframework.ai.document.Document chunk : chunks) {
+                chunk.getMetadata().putAll(Map.of(
+                    "docId", String.valueOf(docId),
+                    "title", title
+                ));
+            }
+            
+            // 5. Store in Vector Database
+            for (org.springframework.ai.document.Document chunk : chunks) {
+                ragService.addDocument(chunk);
+            }
+            
+            updateAiStatus(docId, "COMPLETED");
+            log.info("Successfully ingested document: {} with {} chunks", title, chunks.size());
+            
+        } catch (Exception e) {
+            log.error("Error ingesting document: {}", title, e);
+            updateAiStatus(docId, "FAILED");
+        }
+    }
+    
+    @Transactional
+    protected void updateAiStatus(Long docId, String status) {
+        documentRepository.findById(docId).ifPresent(doc -> {
+            doc.setAiAnalysisStatus(status);
+            documentRepository.save(doc);
+        });
+    }
+    
+    @Transactional
+    protected void updateDocumentWithAiResults(Long docId, String summary, List<String> tags) {
+        documentRepository.findById(docId).ifPresent(doc -> {
+            doc.setAiSummary(summary);
+            
+            // Add tags
+            if (tags != null && !tags.isEmpty()) {
+                List<Tag> tagEntities = new ArrayList<>();
+                // Keep existing tags
+                if (doc.getTags() != null) {
+                    tagEntities.addAll(doc.getTags());
+                }
+                
+                for (String tagName : tags) {
+                    try {
+                        Tag tag = tagService.getOrCreateTag(tagName);
+                        // Check if tag is already in list (avoid duplicates)
+                        if (tagEntities.stream().noneMatch(t -> t.getId().equals(tag.getId()))) {
+                            tagEntities.add(tag);
+                            tagService.incrementTagUsage(tag.getId());
+                        }
+                    } catch (Exception e) {
+                        log.warn("Failed to add AI tag: {}", tagName, e);
+                    }
+                }
+                doc.setTags(tagEntities);
+            }
+            
+            documentRepository.save(doc);
+        });
+    }
+}

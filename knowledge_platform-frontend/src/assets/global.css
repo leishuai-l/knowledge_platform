@@ -1,0 +1,138 @@
+/* 全局标签样式优化 - 确保在各种背景色下文字都清晰可见 */
+
+/* 通用标签样式 - 适用于有颜色背景的标签 */
+.el-tag[style*="background-color"],
+.el-tag[style*="background"] {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.el-tag[style*="background-color"] .el-tag__content,
+.el-tag[style*="background"] .el-tag__content {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.el-tag[style*="background-color"] .el-tag__close,
+.el-tag[style*="background"] .el-tag__close {
+  background-color: rgba(255, 255, 255, 0.2) !important;
+  border-radius: 50% !important;
+  transition: background-color 0.2s ease !important;
+}
+
+.el-tag[style*="background-color"] .el-tag__close:hover,
+.el-tag[style*="background"] .el-tag__close:hover {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 浅色背景标签特殊处理 - 使用深色文字 */
+.el-tag[style*="#ffffff"],
+.el-tag[style*="#f0f0f0"],
+.el-tag[style*="#f5f5f5"],
+.el-tag[style*="#fafafa"],
+.el-tag[style*="rgb(255, 255, 255)"],
+.el-tag[style*="white"],
+.el-tag[style*="White"],
+.el-tag[style*="#eeeeee"],
+.el-tag[style*="#e0e0e0"],
+.el-tag--info {
+  color: #333 !important;
+  text-shadow: none !important;
+}
+
+.el-tag[style*="#ffffff"] .el-tag__content,
+.el-tag[style*="#f0f0f0"] .el-tag__content,
+.el-tag[style*="#f5f5f5"] .el-tag__content,
+.el-tag[style*="#fafafa"] .el-tag__content,
+.el-tag[style*="rgb(255, 255, 255)"] .el-tag__content,
+.el-tag[style*="white"] .el-tag__content,
+.el-tag[style*="White"] .el-tag__content,
+.el-tag[style*="#eeeeee"] .el-tag__content,
+.el-tag[style*="#e0e0e0"] .el-tag__content,
+.el-tag--info .el-tag__content {
+  color: #333 !important;
+  text-shadow: none !important;
+}
+
+.el-tag[style*="#ffffff"] .el-tag__close,
+.el-tag[style*="#f0f0f0"] .el-tag__close,
+.el-tag[style*="#f5f5f5"] .el-tag__close,
+.el-tag[style*="#fafafa"] .el-tag__close,
+.el-tag[style*="rgb(255, 255, 255)"] .el-tag__close,
+.el-tag[style*="white"] .el-tag__close,
+.el-tag[style*="White"] .el-tag__close,
+.el-tag[style*="#eeeeee"] .el-tag__close,
+.el-tag[style*="#e0e0e0"] .el-tag__close {
+  color: #333 !important;
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 其他浅色系列特殊处理 */
+.el-tag[style*="#ffffe0"],
+.el-tag[style*="#fffff0"],
+.el-tag[style*="#f0ffff"],
+.el-tag[style*="#f5fffa"],
+.el-tag[style*="#fffacd"] {
+  color: #333 !important;
+  text-shadow: none !important;
+}
+
+.el-tag[style*="#ffffe0"] .el-tag__content,
+.el-tag[style*="#fffff0"] .el-tag__content,
+.el-tag[style*="#f0ffff"] .el-tag__content,
+.el-tag[style*="#f5fffa"] .el-tag__content,
+.el-tag[style*="#fffacd"] .el-tag__content {
+  color: #333 !important;
+  text-shadow: none !important;
+}
+
+/* 确保标签内容可读性 */
+.el-tag.is-closable .el-tag__content {
+  margin-right: 6px;
+}
+
+/* 针对特定类的标签优化 */
+.selected-tag,
+.white-text-tag {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.selected-tag .el-tag__content,
+.white-text-tag .el-tag__content {
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 修复可能的颜色冲突 - 深色背景标签用白色文字，浅色背景用深色文字 */
+/* danger - 浅红背景用黑色文字 */
+.el-tag--danger {
+  color: #000 !important;
+}
+
+.el-tag--danger .el-tag__content {
+  color: #000 !important;
+}
+
+/* warning - 浅黄背景用黑色文字 */
+.el-tag--warning {
+  color: #000 !important;
+}
+
+.el-tag--warning .el-tag__content {
+  color: #000 !important;
+}
+
+/* success - 浅绿背景用黑色文字 */
+.el-tag--success {
+  color: #000 !important;
+}
+
+.el-tag--success .el-tag__content {
+  color: #000 !important;
+}
+
+/* primary - 浅蓝背景用黑色文字 */
+.el-tag--primary {
+  color: #000 !important;
+}
+
+.el-tag--primary .el-tag__content {
+  color: #000 !important;
+}

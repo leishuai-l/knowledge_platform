@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>邮箱验证码</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        .content {
+            margin-bottom: 30px;
+        }
+        .greeting {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .verification-code {
+            background-color: #f8f9fa;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        .code {
+            font-size: 32px;
+            font-weight: bold;
+            color: #007bff;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+        }
+        .footer {
+            text-align: center;
+            border-top: 1px solid #e9ecef;
+            padding-top: 20px;
+            color: #666;
+            font-size: 12px;
+        }
+        .tips {
+            background-color: #e7f3ff;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">知享平台</div>
+            <div class="subtitle">Knowledge Sharing Platform</div>
+        </div>
+
+        <div class="content">
+            <div class="greeting">
+                亲爱的 <strong th:text="${username}">用户</strong>，您好！
+            </div>
+
+            <p>您正在进行邮箱验证，请使用以下验证码完成验证：</p>
+
+            <div class="verification-code">
+                <div style="margin-bottom: 10px; color: #666; font-size: 14px;">您的验证码是：</div>
+                <div class="code" th:text="${verificationCode}">123456</div>
+                <div style="margin-top: 10px; color: #666; font-size: 12px;">
+                    验证码有效期：<span th:text="${expireMinutes}">10</span> 分钟
+                </div>
+            </div>
+
+            <div class="warning">
+                <strong>⚠️ 安全提示：</strong>
+                <ul style="margin: 10px 0 0 20px; padding: 0;">
+                    <li>请在 <span th:text="${expireMinutes}">10</span> 分钟内完成验证</li>
+                    <li>验证码仅本次使用有效，请勿泄露给他人</li>
+                    <li>如果这不是您的操作，请忽略此邮件</li>
+                </ul>
+            </div>
+
+            <div class="tips">
+                <strong>💡 温馨提示：</strong>
+                <p style="margin: 5px 0;">如果您在使用过程中遇到任何问题，可以联系我们的客服团队，我们将竭诚为您服务。</p>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>此邮件由系统自动发送，请勿回复</p>
+            <p>© <span th:text="${currentYear}">2024</span> 知享平台 版权所有</p>
+            <p style="color: #999; margin-top: 10px;">
+                如果您不再希望接收此类邮件，请联系客服
+            </p>
+        </div>
+    </div>
+</body>
+</html>

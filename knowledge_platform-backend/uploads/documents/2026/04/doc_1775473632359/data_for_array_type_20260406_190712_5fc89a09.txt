@@ -1,0 +1,2 @@
+zhangsan	beijing,shanghai,tianjin,hangzhou
+wangwu	changchun,chengdu,wuhan,beijin

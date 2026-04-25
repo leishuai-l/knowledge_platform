@@ -1,0 +1,29 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:knowledge_platform;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+  mail:
+    host: localhost
+    port: 25
+    username:
+    password:
+  ai:
+    openai:
+      api-key: test-api-key
+
+zhixiang:
+  mail:
+    enabled: false
+  jwt:
+    secret: test-secret-key-for-hs512-test-secret-key-for-hs512-test-secret-key
+    expiration: 3600000
+    refresh-expiration: 604800000

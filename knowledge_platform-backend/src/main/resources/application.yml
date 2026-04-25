@@ -1,0 +1,195 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: knowledge-platform
+  
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/zhixiang?useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:请修改为自己的密码}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  
+  # JPA配置
+  jpa:
+    hibernate:
+      ddl-auto: ${JPA_DDL_AUTO:update}  # 生产环境应设置为 validate
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  
+  # 文件上传配置
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+      enabled: true
+
+  # 邮件配置
+  mail:
+    host: ${MAIL_HOST:smtp.qq.com}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:3148918723@qq.com}
+    password: ${MAIL_PASSWORD:请修改为自己的邮箱授权码}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000
+  
+  # Actuator配置
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: health,info
+    endpoint:
+      health:
+        show-details: when-authorized
+
+  #AI Configuration
+  ai:
+    openai:
+      api-key: ${AI_API_KEY:请修改为自己的API密钥}
+      base-url: ${AI_BASE_URL:https://api.deepseek.com}
+      chat:
+        options:
+          model: deepseek-chat
+          temperature: 0.7
+    vectorstore:
+      qdrant:
+        host: ${QDRANT_HOST:localhost}
+        port: ${QDRANT_PORT:6334}
+        collection-name: ${QDRANT_COLLECTION:knowledge_platform}
+
+# 自定义配置
+zhixiang:
+  ai:
+    enabled: true
+
+  # Qdrant 向量数据库配置
+  vectorstore:
+    qdrant:
+      host: ${QDRANT_HOST:localhost}
+      port: ${QDRANT_PORT:6334}
+      collection-name: ${QDRANT_COLLECTION:knowledge_platform}
+
+  # JWT配置
+  jwt:
+    secret: ${JWT_SECRET:change-me-for-production-knowledge-platform-jwt-secret-change-me-2026}
+    expiration: 86400000 # 24小时，单位毫秒
+    refresh-expiration: 259200000 # 3天，单位毫秒（从7天缩短）
+
+  # 安全配置
+  security:
+    max-login-attempts: 5 # 最大登录失败次数
+    account-lock-minutes: 30 # 账户锁定时间（分钟）
+  
+  # 文件存储配置
+  file:
+    upload-path: ${FILE_UPLOAD_PATH:D:/java/knowledge_platform/knowledge_platform-backend/uploads}
+    max-size: 104857600 # 100MB，单位字节
+    allowed-types: 
+      - application/pdf
+      - application/msword
+      - application/vnd.openxmlformats-officedocument.wordprocessingml.document
+      - application/vnd.ms-excel
+      - application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+      - application/vnd.ms-powerpoint
+      - application/vnd.openxmlformats-officedocument.presentationml.presentation
+      - text/plain
+      - image/jpeg
+      - image/png
+      - image/gif
+      - application/zip
+      - application/x-rar-compressed
+  
+  # 积分配置
+  points:
+    initial: 100 # 新用户初始积分
+    upload-reward: 10 # 上传资料奖励积分
+
+  # 邮件配置
+  mail:
+    from: ${MAIL_FROM:3148918723@qq.com}
+    from-name: ${MAIL_FROM_NAME:知享平台}
+    enabled: ${MAIL_ENABLED:true}  # 启用邮件功能
+    template-path: classpath:/templates/email/
+
+  # 邮箱验证配置
+  email:
+    verification:
+      max-daily-requests: 10  # 每日最大请求次数
+      code-length: 6         # 验证码长度
+      expire-minutes: 10     # 验证码过期时间（分钟）
+    verification-url: ${VERIFICATION_URL:http://localhost:3000/verify}  # 邮箱验证链接基础URL
+
+  # 文件预览配置
+  preview:
+    office-pdf:
+      enabled: ${OFFICE_PDF_PREVIEW_ENABLED:true}
+      libreoffice-path: ${OFFICE_PDF_LIBREOFFICE_PATH:C:/Program Files/LibreOffice/program/soffice.exe}
+      timeout-ms: ${OFFICE_PDF_PREVIEW_TIMEOUT_MS:60000}
+      profile-dir: ${OFFICE_PDF_PROFILE_DIR:D:/java/knowledge_platform/knowledge_platform-backend/data/libreoffice-profile}
+    
+# 日志配置
+logging:
+  level:
+    com.zhixiang.knowledge_platform: INFO
+    org.springframework.security: INFO
+    org.hibernate.SQL: WARN
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/knowledge-platform.log
+    max-size: 10MB
+    max-history: 30
+
+# OpenAPI文档配置
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    doc-expansion: none
+    display-request-duration: true
+    display-operation-id: false
+    show-extensions: false
+    show-common-extensions: false
+    default-models-expand-depth: 1
+    default-model-expand-depth: 1
+    config-url: /v3/api-docs/swagger-config
+    urls:
+      - name: "API 接口文档"
+        url: /v3/api-docs
+    # 移除自定义样式
+    custom-css-url: ""
+    custom-js-url: ""
+  show-actuator: false
+  # 简化分组配置
+  group-configs:
+    - group: "认证接口"
+      paths-to-match: "/api/auth/**,/api/email/**"
+    - group: "业务接口"
+      paths-to-match: "/api/documents/**,/api/categories/**,/api/tags/**,/api/users/**"
+    - group: "测试接口"
+      paths-to-match: "/api/test/**"

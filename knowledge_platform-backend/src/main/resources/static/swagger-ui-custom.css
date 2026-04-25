@@ -1,0 +1,239 @@
+/* 知享平台 Swagger UI 自定义样式 */
+
+/* 主色调和品牌色彩 */
+:root {
+  --zhixiang-primary: #1890ff;
+  --zhixiang-secondary: #52c41a;
+  --zhixiang-accent: #faad14;
+  --zhixiang-bg: #f5f5f5;
+  --zhixiang-card: #ffffff;
+  --zhixiang-text: #262626;
+  --zhixiang-border: #d9d9d9;
+}
+
+/* 顶部标题区域美化 */
+.swagger-ui .info {
+  background: linear-gradient(135deg, var(--zhixiang-primary), var(--zhixiang-secondary));
+  padding: 30px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+  color: white;
+  box-shadow: 0 8px 24px rgba(24, 144, 255, 0.15);
+}
+
+.swagger-ui .info .title {
+  color: white !important;
+  font-size: 2.5em !important;
+  font-weight: 700;
+  margin-bottom: 15px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.swagger-ui .info .description {
+  color: rgba(255, 255, 255, 0.95) !important;
+  font-size: 1.1em;
+  line-height: 1.6;
+}
+
+/* 顶部导航栏美化 */
+.swagger-ui .topbar {
+  background: linear-gradient(90deg, var(--zhixiang-primary), var(--zhixiang-secondary));
+  padding: 15px 0;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.swagger-ui .topbar .download-url-wrapper {
+  display: none;
+}
+
+/* 标签组美化 */
+.swagger-ui .opblock-tag {
+  background: var(--zhixiang-card);
+  border: 1px solid var(--zhixiang-border);
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.swagger-ui .opblock-tag-section h3 {
+  background: linear-gradient(90deg, var(--zhixiang-primary), var(--zhixiang-secondary));
+  color: white !important;
+  padding: 15px 20px;
+  margin: 0;
+  font-size: 1.3em;
+  font-weight: 600;
+  border: none;
+}
+
+/* API 操作块美化 */
+.swagger-ui .opblock {
+  margin-bottom: 15px;
+  border-radius: 8px;
+  border: 1px solid var(--zhixiang-border);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.swagger-ui .opblock:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.swagger-ui .opblock.is-open {
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.15);
+}
+
+/* HTTP 方法标签美化 */
+.swagger-ui .opblock.opblock-get .opblock-summary-method {
+  background: var(--zhixiang-secondary);
+}
+
+.swagger-ui .opblock.opblock-post .opblock-summary-method {
+  background: var(--zhixiang-primary);
+}
+
+.swagger-ui .opblock.opblock-put .opblock-summary-method {
+  background: var(--zhixiang-accent);
+}
+
+.swagger-ui .opblock.opblock-delete .opblock-summary-method {
+  background: #ff4d4f;
+}
+
+/* 响应代码美化 */
+.swagger-ui .responses-inner h4,
+.swagger-ui .responses-inner h5 {
+  color: var(--zhixiang-text);
+  font-weight: 600;
+}
+
+.swagger-ui .response-col_status {
+  font-weight: 700;
+}
+
+/* 参数表格美化 */
+.swagger-ui .parameters thead tr th,
+.swagger-ui .responses thead tr th {
+  background: var(--zhixiang-bg);
+  color: var(--zhixiang-text);
+  font-weight: 600;
+  border-bottom: 2px solid var(--zhixiang-primary);
+}
+
+/* 按钮美化 */
+.swagger-ui .btn {
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.swagger-ui .btn.execute {
+  background: var(--zhixiang-primary);
+  border-color: var(--zhixiang-primary);
+}
+
+.swagger-ui .btn.execute:hover {
+  background: #1677ff;
+  border-color: #1677ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(24, 144, 255, 0.3);
+}
+
+/* Try it out 按钮 */
+.swagger-ui .btn.try-out__btn {
+  background: var(--zhixiang-secondary);
+  border-color: var(--zhixiang-secondary);
+  color: white;
+}
+
+/* 代码高亮美化 */
+.swagger-ui .highlight-code pre {
+  background: #f6f8fa;
+  border: 1px solid var(--zhixiang-border);
+  border-radius: 6px;
+  padding: 15px;
+}
+
+/* 模型展示美化 */
+.swagger-ui .model-box {
+  background: var(--zhixiang-card);
+  border: 1px solid var(--zhixiang-border);
+  border-radius: 8px;
+  padding: 15px;
+}
+
+/* 响应示例美化 */
+.swagger-ui .responses-table td {
+  padding: 12px;
+}
+
+/* 自定义徽章样式 */
+.swagger-ui .info::before {
+  content: "🎓";
+  font-size: 3em;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  opacity: 0.2;
+}
+
+/* 滚动条美化 */
+.swagger-ui ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.swagger-ui ::-webkit-scrollbar-track {
+  background: var(--zhixiang-bg);
+  border-radius: 4px;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb {
+  background: var(--zhixiang-primary);
+  border-radius: 4px;
+}
+
+.swagger-ui ::-webkit-scrollbar-thumb:hover {
+  background: #1677ff;
+}
+
+/* 加载动画 */
+.swagger-ui .loading-container::before {
+  content: "🚀 正在加载知享平台API文档...";
+  font-size: 1.2em;
+  color: var(--zhixiang-primary);
+  font-weight: 600;
+}
+
+/* 错误提示美化 */
+.swagger-ui .errors-wrapper {
+  background: #fff2f0;
+  border: 1px solid #ffccc7;
+  border-radius: 6px;
+  color: #a8071a;
+}
+
+/* 成功提示美化 */
+.swagger-ui .response.success {
+  background: #f6ffed;
+  border: 1px solid #b7eb8f;
+  border-radius: 6px;
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .swagger-ui .info {
+    padding: 20px;
+  }
+  
+  .swagger-ui .info .title {
+    font-size: 2em !important;
+  }
+  
+  .swagger-ui .opblock-tag-section h3 {
+    padding: 12px 15px;
+    font-size: 1.1em;
+  }
+}
